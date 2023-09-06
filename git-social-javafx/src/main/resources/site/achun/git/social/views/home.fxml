@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.views.HomeController">
+   <children>
+      <Label fx:id="tipsLabel" layoutX="14.0" layoutY="14.0" prefHeight="15.0" prefWidth="303.0" text="Label" />
+   </children>
+</AnchorPane>
