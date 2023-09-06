@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.eclipse.jgit.util.StringUtils;
+import site.achun.git.social.local.Cache;
 import site.achun.git.social.local.ConfigUtil;
 import site.achun.git.social.views.HomeController;
 
@@ -16,6 +17,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         try {
             if(!StringUtils.isEmptyOrNull(ConfigUtil.get("repoUrl"))){
+                Cache.repoUrl = ConfigUtil.get("repoUrl");
                 openHomeView(stage);
             }else{
                 openInitView(stage);
@@ -28,7 +30,7 @@ public class MainApplication extends Application {
     public static void openHomeView(Stage stage) throws IOException {
         stage.setTitle("Home");
         FXMLLoader fxmlLoader = new FXMLLoader(HomeController.class.getResource("home.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 700);
         stage.setScene(scene);
         stage.show();
     }
