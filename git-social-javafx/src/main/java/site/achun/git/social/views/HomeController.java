@@ -2,26 +2,25 @@ package site.achun.git.social.views;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import site.achun.git.social.compents.Tweet;
+import site.achun.git.social.data.Content;
 import site.achun.git.social.data.DataScanService;
 import site.achun.git.social.local.Cache;
-import site.achun.git.social.local.ConfigUtil;
 import site.achun.git.social.local.GitUtil;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,8 +28,6 @@ public class HomeController implements Initializable {
 
     @FXML
     private Label tipsLabel;
-    @FXML
-    private TextArea contentTextArea;
     @FXML
     private ListView contentListView;
 
@@ -84,43 +81,12 @@ public class HomeController implements Initializable {
         // 获取内容
         DataScanService.scan();
         if(DataScanService.contents!=null){
-            DataScanService.contents.stream().forEach(content -> contentListView.getItems().add(content.getContent()));
+            DataScanService.contents.stream().forEach(content -> contentListView.getItems().add(buildContentView(content)));
         }
     }
 
-
-    @FXML
-    protected void onSubmit() throws IOException, GitAPIException {
-        String content = contentTextArea.getText();
-        String uuid = UUID.randomUUID().toString().replace("-","");
-        LocalDateTime now = LocalDateTime.now();
-        String date = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
-        Path contentFilePath = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl), "content", date, uuid + ".md");
-        File contentFile = contentFilePath.toFile();
-        if(!contentFile.exists()){
-            contentFile.getParentFile().mkdirs();
-            contentFile.createNewFile();
-        }
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("time:" + now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        buffer.append("\n");
-        buffer.append("\n");
-        buffer.append("-----------------");
-        buffer.append("\n");
-        buffer.append(content);
-        try (FileWriter fileWriter = new FileWriter(contentFile)) {
-            fileWriter.write(buffer.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        tipsLabel.setText(content);
-        // 提交到git
-        UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(ConfigUtil.get("username"),ConfigUtil.get("password"));
-        File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
-        Git git = new Git(new FileRepository(repoDir));
-        git.add().addFilepattern(".").call();
-        git.commit().setAll(true).setMessage("AUTO COMMIT").call();
-        git.push().setRemote("origin").setCredentialsProvider(credentialsProvider).call();
+    private HBox buildContentView(Content content){
+        return new Tweet("SS",content.getContent(),"./workspace/heika/my-git-social/assets/cover.png");
     }
 
 }

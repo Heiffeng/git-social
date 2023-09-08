@@ -5,9 +5,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.views.HomeController">
    <children>
+      <ListView fx:id="contentListView" layoutY="29.0" prefHeight="634.0" prefWidth="600.0" />
       <Label fx:id="tipsLabel" layoutX="14.0" layoutY="670.0" prefHeight="15.0" prefWidth="303.0" text="Label" />
-      <TextArea fx:id="contentTextArea" layoutX="14.0" layoutY="14.0" prefHeight="110.0" prefWidth="564.0" />
-      <Button fx:id="submitButton" layoutX="506.0" layoutY="135.0" mnemonicParsing="false" onAction="#onSubmit" prefHeight="22.0" prefWidth="72.0" text="Button" />
-      <ListView fx:id="contentListView" layoutX="14.0" layoutY="171.0" prefHeight="492.0" prefWidth="571.0" />
    </children>
 </AnchorPane>

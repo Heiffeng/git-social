@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.util.StringUtils;
+import site.achun.git.social.local.Cache;
 import site.achun.git.social.local.ConfigUtil;
 import site.achun.git.social.local.GitUtil;
 import site.achun.git.social.views.HomeController;
@@ -34,6 +35,7 @@ public class MainController implements Initializable {
         }
         GitUtil.cloneOrPull(repoUrl);
         ConfigUtil.set("repoUrl",repoUrl);
+        Cache.repoUrl = repoUrl;
         Stage stage = (Stage) repoUrlTextField.getScene().getWindow();
         MainApplication.openHomeView(stage);
     }
