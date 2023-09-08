@@ -3,9 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.views.HomeController">
+<AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.views.HomeController">
    <children>
-      <ListView fx:id="contentListView" layoutY="29.0" prefHeight="634.0" prefWidth="600.0" />
-      <Label fx:id="tipsLabel" layoutX="14.0" layoutY="670.0" prefHeight="15.0" prefWidth="303.0" text="Label" />
+      <VBox fx:id="vbox" prefHeight="666.0" prefWidth="600.0" />
+      <Button onAction="#addNewContent" layoutX="535.0" layoutY="670.0" mnemonicParsing="false" text="Button" />
    </children>
+
 </AnchorPane>

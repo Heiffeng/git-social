@@ -4,7 +4,9 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.MainController">
-    <Button layoutX="380.0" layoutY="32.0" onAction="#onSubmit" text="Submit" />
-    <TextField fx:id="repoUrlTextField" layoutX="90.0" layoutY="32.0" prefHeight="23.0" prefWidth="253.0" promptText="Input center repository url..." />
-    <Label fx:id="tipsLabel" layoutX="90.0" layoutY="69.0" prefHeight="15.0" prefWidth="350.0" text="" />
+    <TextField fx:id="repoUrlTextField" layoutX="90.0" layoutY="32.0" prefHeight="23.0" prefWidth="274.0" promptText="Input center repository url..." />
+    <Label fx:id="tipsLabel" layoutX="90.0" layoutY="155.0" prefHeight="15.0" prefWidth="274.0" text="" />
+    <TextField fx:id="usernameTextField" layoutX="90.0" layoutY="77.0" prefHeight="23.0" prefWidth="274.0" promptText="Input username..."/>
+    <TextField fx:id="passwordTextField" layoutX="90.0" layoutY="119.0" prefHeight="23.0" prefWidth="274.0" promptText="Input password..."/>
+    <Button layoutX="300.0" layoutY="176.0" onAction="#onSubmit" text="Submit" />
 </AnchorPane>
