@@ -11,6 +11,7 @@ module site.achun.git.social {
 
     opens site.achun.git.social to javafx.fxml;
     opens site.achun.git.social.views to javafx.fxml;
+    opens site.achun.git.social.data;
 
     exports site.achun.git.social;
 }

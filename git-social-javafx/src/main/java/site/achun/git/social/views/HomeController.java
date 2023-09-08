@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,10 +90,13 @@ public class HomeController implements Initializable {
         vbox.setPadding(new Insets(10));
 
         // 获取内容
-        DataScanService.scan();
-
-        if(DataScanService.contents!=null){
-            DataScanService.contents.stream().forEach(content -> vbox.getChildren().add(buildContentView(content)));
+        try {
+            DataScanService.scan();
+            if(DataScanService.contents!=null){
+                DataScanService.contents.stream().forEach(content -> vbox.getChildren().add(buildContentView(content)));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,7 +111,11 @@ public class HomeController implements Initializable {
     }
 
     private HBox buildContentView(Content content){
-        return new Tweet("SS",content.getContent(),"./workspace/heika/my-git-social/assets/cover.png","2023-09-01 12:21:22");
+        return new Tweet(
+                content.getUser().getNickname(),
+                content.getContent(),
+                "./workspace/heika/my-git-social/assets/cover.png",
+                content.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
 }
