@@ -1,14 +1,17 @@
 package site.achun.git.social.data;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.local.PathUtil;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommentsService {
 
@@ -20,10 +23,17 @@ public class CommentsService {
             commentFile.getParentFile().mkdirs();
             commentFile.createNewFile();
             Map<String,Comments> map = new HashMap<>();
-            map.put(uuid,new Comments(uuid,content,""));
-            jsonString = JSONObject.toJSONString(map);
+            jsonString = JSON.toJSONString(Arrays.asList(new Comments(uuid,content,"")));
         }else{
-
+            String lines = Files.lines(commentFile.toPath()).collect(Collectors.joining());
+            List<Comments> list = null;
+            if(StringUtils.isEmptyOrNull(lines)){
+                list = new ArrayList<>();
+            }else{
+                list = JSON.parseArray(lines, Comments.class);
+            }
+            list.add(new Comments(uuid,content,""));
+            jsonString = JSON.toJSONString(list);
         }
         // Write JSON to a file
         try (FileWriter fileWriter = new FileWriter(commentFile)) {

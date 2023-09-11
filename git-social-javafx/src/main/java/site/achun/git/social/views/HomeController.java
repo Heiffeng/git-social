@@ -111,12 +111,7 @@ public class HomeController implements Initializable {
     }
 
     private HBox buildContentView(Content content){
-        return new Tweet(
-                content.getUuid(),
-                content.getUser().getNickname(),
-                content.getContent(),
-                content.getUser().getCover(),
-                content.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        return new Tweet(content);
     }
 
 }

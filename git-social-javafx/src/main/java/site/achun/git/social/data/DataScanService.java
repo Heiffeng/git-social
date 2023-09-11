@@ -1,5 +1,6 @@
 package site.achun.git.social.data;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.local.Cache;
@@ -18,17 +19,37 @@ import java.util.stream.Collectors;
 public class DataScanService {
 
     public static List<Content> contents;
+
+    public static Map<String,List<CommentsInfo>> commentsMap;
     public static void scan() throws IOException {
         contents = new ArrayList<>();
+        commentsMap = new HashMap<>();
         if(Cache.follows == null){
             return;
         }
+
         for (String follow : Cache.follows) {
             Path contentPath = Path.of("./workspace", GitUtil.getPathFromUri(follow), "content");
             // 读取用户信息
             User user = readUserInfo(follow);
+
+            // 读取评论
+            File commentsFile = Path.of("./workspace", GitUtil.getPathFromUri(follow), "content", "comments.json").toFile();
+            if(commentsFile.exists()){
+                List<Comments> commentList = readComments(commentsFile);
+                for (Comments comments : commentList) {
+                    if(commentsMap.containsKey(comments.uuid())){
+                        commentsMap.get(comments.uuid()).add(new CommentsInfo(user,comments));
+                    }else{
+                        commentsMap.put(comments.uuid(),Arrays.asList(new CommentsInfo(user,comments)));
+                    }
+                }
+            }
+
+            // 读取动态
             if(contentPath.toFile().exists()){
                 List<File> contentFiles = Arrays.stream(contentPath.toFile().listFiles())
+                        .filter(file -> file.isDirectory())
                         .flatMap(file -> Arrays.stream(file.listFiles()))
                         .collect(Collectors.toList());
                 List<Content> currentUserContents = contentFiles.stream()
@@ -37,6 +58,12 @@ public class DataScanService {
                 currentUserContents.stream()
                         .forEach(content -> content.setUser(user));
                 contents.addAll(currentUserContents);
+            }
+        }
+        // 读取评论
+        for (Content content : contents) {
+            if(commentsMap.containsKey(content.getUuid())){
+                content.setComments(commentsMap.get(content.getUuid()));
             }
         }
     }
@@ -54,6 +81,15 @@ public class DataScanService {
         }
         user.setRepoUrl(follow);
         return user;
+    }
+
+    public static List<Comments> readComments(File file) throws IOException {
+        String lines = Files.lines(file.toPath()).collect(Collectors.joining());
+        if(StringUtils.isEmptyOrNull(lines)){
+            return new ArrayList<>();
+        }
+        List<Comments> list = JSON.parseArray(lines, Comments.class);
+        return list;
     }
     public static Content read(File file){
         Content content = new Content();

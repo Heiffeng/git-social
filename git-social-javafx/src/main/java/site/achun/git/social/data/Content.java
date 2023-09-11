@@ -1,12 +1,23 @@
 package site.achun.git.social.data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Content {
     private User user;
     private String uuid;
     private LocalDateTime time;
     private String content;
+
+    private List<CommentsInfo> comments;
+
+    public List<CommentsInfo> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentsInfo> comments) {
+        this.comments = comments;
+    }
 
     public User getUser() {
         return user;
