@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.local.Cache;
 import site.achun.git.social.local.GitUtil;
+import site.achun.git.social.local.PathUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,16 +12,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataScanService {
 
     public static List<Content> contents;
     public static void scan() throws IOException {
+        contents = new ArrayList<>();
         if(Cache.follows == null){
             return;
         }
@@ -32,11 +31,12 @@ public class DataScanService {
                 List<File> contentFiles = Arrays.stream(contentPath.toFile().listFiles())
                         .flatMap(file -> Arrays.stream(file.listFiles()))
                         .collect(Collectors.toList());
-                contents = contentFiles.stream()
+                List<Content> currentUserContents = contentFiles.stream()
                         .map(DataScanService::read)
                         .collect(Collectors.toList());
-                contents.stream()
+                currentUserContents.stream()
                         .forEach(content -> content.setUser(user));
+                contents.addAll(currentUserContents);
             }
         }
     }
@@ -48,6 +48,7 @@ public class DataScanService {
             String userInfoJsonString = Files.lines(userInfoFile.toPath()).collect(Collectors.joining());
             UserInfo userInfo = JSONObject.parseObject(userInfoJsonString, UserInfo.class);
             user.setNickname(userInfo.name());
+            user.setCover(Path.of("./workspace",GitUtil.getPathFromUri(follow),userInfo.cover()).toString());
         }else{
             user.setNickname(GitUtil.getPathFromUri(follow));
         }

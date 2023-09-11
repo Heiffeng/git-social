@@ -49,7 +49,7 @@ public class Tweet extends HBox {
         commentBox.getChildren().addAll(commentTextField, commentButton);
 
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(headerBox,textLabel,commentBox);
+        vbox.getChildren().addAll(headerBox,textLabel);
 
 
         getChildren().addAll(userImage, vbox);

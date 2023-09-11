@@ -114,7 +114,7 @@ public class HomeController implements Initializable {
         return new Tweet(
                 content.getUser().getNickname(),
                 content.getContent(),
-                "./workspace/heika/my-git-social/assets/cover.png",
+                content.getUser().getCover(),
                 content.getTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
