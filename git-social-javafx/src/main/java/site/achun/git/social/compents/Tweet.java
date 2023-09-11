@@ -9,12 +9,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import site.achun.git.social.data.CommentsService;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Tweet extends HBox {
 
-    public Tweet(String username, String text, String imagePath, String timestamp) {
+    public Tweet(String uuid,String username, String text, String imagePath, String timestamp) {
         setSpacing(10);
         setPadding(new Insets(5));
 
@@ -43,13 +45,18 @@ public class Tweet extends HBox {
             if (!comment.isEmpty()) {
                 // 处理评论，例如，将评论添加到推文中或发送到服务器
                 System.out.println("Comment: " + comment);
+                try {
+                    CommentsService.addComments(uuid,comment);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 commentTextField.clear();
             }
         });
         commentBox.getChildren().addAll(commentTextField, commentButton);
 
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(headerBox,textLabel);
+        vbox.getChildren().addAll(headerBox,textLabel,commentBox);
 
 
         getChildren().addAll(userImage, vbox);

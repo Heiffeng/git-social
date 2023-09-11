@@ -112,6 +112,7 @@ public class HomeController implements Initializable {
 
     private HBox buildContentView(Content content){
         return new Tweet(
+                content.getUuid(),
                 content.getUser().getNickname(),
                 content.getContent(),
                 content.getUser().getCover(),
