@@ -2,7 +2,9 @@ package site.achun.git.social.data;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.util.StringUtils;
+import site.achun.git.social.local.GitUtil;
 import site.achun.git.social.local.PathUtil;
 
 import java.io.File;
@@ -40,6 +42,11 @@ public class CommentsService {
             fileWriter.write(jsonString);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        try {
+            GitUtil.push();
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
         }
     }
 }

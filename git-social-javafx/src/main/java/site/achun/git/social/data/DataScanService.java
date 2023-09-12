@@ -40,7 +40,9 @@ public class DataScanService {
                     if(commentsMap.containsKey(comments.uuid())){
                         commentsMap.get(comments.uuid()).add(new CommentsInfo(user,comments));
                     }else{
-                        commentsMap.put(comments.uuid(),Arrays.asList(new CommentsInfo(user,comments)));
+                        List<CommentsInfo> list = new ArrayList<>();
+                        list.add(new CommentsInfo(user,comments));
+                        commentsMap.put(comments.uuid(),list);
                     }
                 }
             }

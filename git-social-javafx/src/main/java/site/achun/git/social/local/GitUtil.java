@@ -1,11 +1,9 @@
 package site.achun.git.social.local;
 
-import org.controlsfx.control.PrefixSelectionChoiceBox;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.errors.TransportException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -33,6 +31,16 @@ public class GitUtil {
             Git git = new Git(new FileRepository(repoDir));
             git.pull().call();
         }
+    }
+
+    public static void push() throws IOException, GitAPIException {
+        // 提交到git
+        UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(ConfigUtil.get("username"),ConfigUtil.get("password"));
+        File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
+        Git git = new Git(new FileRepository(repoDir));
+        git.add().addFilepattern(".").call();
+        git.commit().setAll(true).setMessage("AUTO COMMIT").call();
+        git.push().setRemote("origin").setCredentialsProvider(credentialsProvider).call();
     }
 
     public static String getPathFromUri(String url) {

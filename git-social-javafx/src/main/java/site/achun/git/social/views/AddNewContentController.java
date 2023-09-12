@@ -47,11 +47,6 @@ public class AddNewContentController {
             e.printStackTrace();
         }
         // 提交到git
-        UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(ConfigUtil.get("username"),ConfigUtil.get("password"));
-        File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
-        Git git = new Git(new FileRepository(repoDir));
-        git.add().addFilepattern(".").call();
-        git.commit().setAll(true).setMessage("AUTO COMMIT").call();
-        git.push().setRemote("origin").setCredentialsProvider(credentialsProvider).call();
+        GitUtil.push();
     }
 }

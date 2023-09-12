@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -11,18 +12,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import site.achun.git.social.data.CommentsService;
-import site.achun.git.social.data.Content;
+import site.achun.git.social.data.*;
+import site.achun.git.social.local.UserUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class TweetComponent extends HBox {
 
+    private VBox rightVBox;
     public TweetComponent(Content content) {
         setSpacing(10);
         setPadding(new Insets(5));
@@ -39,22 +43,42 @@ public class TweetComponent extends HBox {
         // 推文文本
         ContentTextFlow contentScrollPane = new ContentTextFlow(content.getContent());
 
-        OperationsHBox operationsHBox = new OperationsHBox(content);
-
-        VBox vbox = new VBox();
-        vbox.setMaxWidth(490);
-        vbox.setMinWidth(490);
-        vbox.getChildren().addAll(username,contentScrollPane,operationsHBox);
+        OperationsHBox operationsHBox = new OperationsHBox(text -> {
+            try {
+                Comments comments = new Comments(content.getUuid(),text,"");
+                User user = UserUtil.getCurrentUser();
+                CommentsInfo commentsInfo = new CommentsInfo(user, comments);
+                if(content.getComments()==null){
+                    content.setComments(new ArrayList<>());
+                }
+                content.getComments().add(commentsInfo);
+                CommentsService.addComments(content.getUuid(), text);
+                this.whenAddComments(commentsInfo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        rightVBox = new VBox();
+        rightVBox.setMaxWidth(490);
+        rightVBox.setMinWidth(490);
+        rightVBox.getChildren().addAll(username,contentScrollPane,operationsHBox);
 
         if(content.getComments()!=null){
             List<CommentComponent> commentsList = content.getComments().stream()
                     .map(comment -> new CommentComponent(comment))
                     .collect(Collectors.toList());
-            vbox.getChildren().addAll(commentsList);
+            rightVBox.getChildren().addAll(commentsList);
         }
 
-        getChildren().addAll(userImage, vbox);
+        getChildren().addAll(userImage, rightVBox);
     }
+
+    private void whenAddComments(CommentsInfo commentsInfo){
+        rightVBox.getChildren().add(new CommentComponent(commentsInfo));
+
+    }
+
+
 
     public static class Username extends HBox{
         public Username(String username, LocalDateTime time){
@@ -82,14 +106,8 @@ public class TweetComponent extends HBox {
     }
 
     public static class OperationsHBox extends GridPane {
-        public OperationsHBox(Content content){
-            CommentSubmitComponent commentSubmitComponent = new CommentSubmitComponent(text -> {
-                try {
-                    CommentsService.addComments(content.getUuid(), text);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        public OperationsHBox(Consumer<String> addComments){
+            CommentSubmitComponent commentSubmitComponent = new CommentSubmitComponent(addComments);
             Button button3 = new Button("Like");
             this.add(new HBox(),0,0);
 
@@ -98,6 +116,37 @@ public class TweetComponent extends HBox {
             hbox.getChildren().addAll(commentSubmitComponent,button3);
             this.add(hbox,1,0);
             this.setHgap(200);
+        }
+    }
+
+    public static class CommentSubmitComponent extends HBox {
+
+        public CommentSubmitComponent(Consumer<String> consumer){
+            this.setSpacing(10);
+            this.setAlignment(Pos.CENTER_LEFT);
+            TextField commentTextField = new TextField();
+            commentTextField.setPromptText("Add a comment...");
+            this.setStyle("-fx-opacity: 0.5;"); // 设置初始透明度
+            commentTextField.setOnMousePressed(event -> {
+                this.setStyle("-fx-opacity: 1.0;");
+            });
+            commentTextField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+                if (!newVal) {
+                    this.setStyle("-fx-opacity: 0.5;"); // 失去焦点时设置透明度为 0.5
+                }
+            });
+            Button commentButton = new Button("Submit");
+            commentButton.setOnAction(e -> {
+                String comment = commentTextField.getText();
+                if (!comment.isEmpty()) {
+                    // 处理评论，例如，将评论添加到推文中或发送到服务器
+                    System.out.println("Comment: " + comment);
+                    consumer.accept(comment);
+//                    CommentsService.addComments(content.getUuid(),comment);
+                    commentTextField.clear();
+                }
+            });
+            this.getChildren().addAll(commentTextField, commentButton);
         }
     }
 }
