@@ -5,7 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,13 +15,16 @@ import javafx.stage.Stage;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import site.achun.git.social.compents.AddFollows;
 import site.achun.git.social.compents.TweetComponent;
 import site.achun.git.social.data.Content;
 import site.achun.git.social.data.DataScanService;
 import site.achun.git.social.local.Cache;
+import site.achun.git.social.local.FollowsFileUtil;
 import site.achun.git.social.local.GitUtil;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -44,41 +49,20 @@ public class HomeController implements Initializable {
             git.pull().call();
 
             // 读取关注列表
-            Path followsPath = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl), "follows.txt");
-            if(followsPath.toFile().exists()){
-                List<String> follows = Files.lines(followsPath).collect(Collectors.toList());
-                if(!follows.isEmpty()){
-                    Cache.follows = follows;
-                    follows.stream().forEach(followRepoUrl -> {
-                        try {
-                            GitUtil.cloneOrPull(followRepoUrl);
-                        } catch (GitAPIException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                }
+            List<String> follows = FollowsFileUtil.readFollows(Cache.repoUrl);
+            if(!follows.isEmpty()){
+                Cache.follows = follows;
+                follows.stream().forEach(followRepoUrl -> {
+                    try {
+                        GitUtil.cloneOrPull(followRepoUrl);
+                    } catch (GitAPIException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (CanceledException e) {
-            throw new RuntimeException(e);
-        } catch (NoHeadException e) {
-            throw new RuntimeException(e);
-        } catch (RefNotAdvertisedException e) {
-            throw new RuntimeException(e);
-        } catch (RefNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (WrongRepositoryStateException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidRemoteException e) {
-            throw new RuntimeException(e);
-        } catch (TransportException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (GitAPIException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -108,7 +92,14 @@ public class HomeController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
+    @FXML
+    protected void addNewFollows(){
+        Scene scene = new Scene(new AddFollows(),300,200);
+        Stage stage = new Stage();
+        stage.setTitle("Add Follows");
+        stage.setScene(scene);
+        stage.show();
+    }
     private HBox buildContentView(Content content){
         return new TweetComponent(content);
     }
