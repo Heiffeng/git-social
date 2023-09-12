@@ -60,6 +60,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.mkpaz</groupId>
+            <artifactId>atlantafx-base</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
             <version>6.6.1.202309021850-r</version>

@@ -78,16 +78,14 @@ public class TweetComponent extends HBox {
 
     }
 
-
-
     public static class Username extends HBox{
         public Username(String username, LocalDateTime time){
             Label usernameLabel = new Label(username);
-            usernameLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            usernameLabel.setFont(Font.font("KaiTi", FontWeight.EXTRA_BOLD, 16));
 
             String timeString = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             Label timestampLabel = new Label(timeString);
-            timestampLabel.setStyle("-fx-font-size: 10px; -fx-opacity: 0.7");
+            timestampLabel.setStyle("-fx-font-size: 12px; -fx-opacity: 0.7");
 
             this.setSpacing(10);
 
@@ -98,7 +96,7 @@ public class TweetComponent extends HBox {
     public static class ContentTextFlow extends TextFlow {
         public ContentTextFlow(String content){
             Text text = new Text(content);
-            text.setFont(Font.font("Arial", FontWeight.NORMAL, 12)); // 你可以根据需要调整字体和字号
+            text.setFont(Font.font("KaiTi", FontWeight.NORMAL, 14)); // 你可以根据需要调整字体和字号
             text.setStyle("-fx-opacity: 0.8"); // 调整不透明度以控制存在感
 
             this.getChildren().add(text);
@@ -115,7 +113,7 @@ public class TweetComponent extends HBox {
             hbox.setSpacing(10);
             hbox.getChildren().addAll(commentSubmitComponent,button3);
             this.add(hbox,1,0);
-            this.setHgap(200);
+            this.setHgap(150);
         }
     }
 

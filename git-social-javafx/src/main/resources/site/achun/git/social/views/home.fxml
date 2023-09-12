@@ -5,9 +5,9 @@
 
 <AnchorPane fx:id="anchorPane" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="site.achun.git.social.views.HomeController">
    <children>
-      <ScrollPane fx:id="scrollPane" prefHeight="666.0" prefWidth="600.0" />
-      <Button onAction="#addNewContent" layoutX="450.0" layoutY="670.0" mnemonicParsing="false" text="Create Moments" />
-      <Button onAction="#addNewFollows" layoutX="350.0" layoutY="670.0" mnemonicParsing="false" text="Add Follows" />
+      <ScrollPane fx:id="scrollPane" prefHeight="850.0" prefWidth="600.0" />
+      <Button onAction="#addNewContent" layoutX="450.0" layoutY="860.0" mnemonicParsing="false" text="Create Moments" />
+      <Button onAction="#addNewFollows" layoutX="350.0" layoutY="860.0" mnemonicParsing="false" text="Add Follows" />
    </children>
 
 </AnchorPane>

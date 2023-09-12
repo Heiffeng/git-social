@@ -2,12 +2,8 @@ package site.achun.git.social.views;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.internal.storage.file.FileRepository;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import site.achun.git.social.local.Cache;
-import site.achun.git.social.local.ConfigUtil;
 import site.achun.git.social.local.GitUtil;
 
 import java.io.File;

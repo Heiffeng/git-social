@@ -1,13 +1,10 @@
 package site.achun.git.social.views;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,6 +12,7 @@ import javafx.stage.Stage;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import site.achun.git.social.compents.AddContent;
 import site.achun.git.social.compents.AddFollows;
 import site.achun.git.social.compents.TweetComponent;
 import site.achun.git.social.data.Content;
@@ -27,10 +25,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
 
@@ -84,11 +80,10 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    protected void addNewContent() throws IOException {
+    protected void addNewContent(){
         Stage stage = new Stage();
-        FXMLLoader fxmlLoader = new FXMLLoader(AddNewContentController.class.getResource("add-new-content.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
-        stage.setTitle("Hello!");
+        stage.setTitle("Add Content");
+        Scene scene = new Scene(new AddContent(), 400, 300);
         stage.setScene(scene);
         stage.show();
     }
