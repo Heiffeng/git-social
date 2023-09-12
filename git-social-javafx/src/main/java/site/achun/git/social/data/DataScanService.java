@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.local.Cache;
 import site.achun.git.social.local.GitUtil;
-import site.achun.git.social.local.PathUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,6 +65,9 @@ public class DataScanService {
                 content.setComments(commentsMap.get(content.getUuid()));
             }
         }
+        contents = contents.stream()
+                .sorted((a1,a2)->a1.getTime().isBefore(a2.getTime())?1:-1)
+                .collect(Collectors.toList());
     }
 
     public static User readUserInfo(String follow) throws IOException {

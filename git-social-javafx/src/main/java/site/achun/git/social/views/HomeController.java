@@ -5,9 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,8 +13,7 @@ import javafx.stage.Stage;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
-import site.achun.git.social.MainApplication;
-import site.achun.git.social.compents.Tweet;
+import site.achun.git.social.compents.TweetComponent;
 import site.achun.git.social.data.Content;
 import site.achun.git.social.data.DataScanService;
 import site.achun.git.social.local.Cache;
@@ -27,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +33,7 @@ public class HomeController implements Initializable {
     private AnchorPane anchorPane;
 
     @FXML
-    private VBox vbox;
+    private ScrollPane scrollPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -86,8 +82,11 @@ public class HomeController implements Initializable {
             throw new RuntimeException(e);
         }
 
+        VBox vbox = new VBox();
         vbox.setSpacing(10);
         vbox.setPadding(new Insets(10));
+        scrollPane.setFitToWidth(true);
+        scrollPane.setContent(vbox);
 
         // 获取内容
         try {
@@ -111,7 +110,7 @@ public class HomeController implements Initializable {
     }
 
     private HBox buildContentView(Content content){
-        return new Tweet(content);
+        return new TweetComponent(content);
     }
 
 }

@@ -1,4 +1,4 @@
-package site.achun.git.social;
+package site.achun.git.social.views;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.util.StringUtils;
+import site.achun.git.social.MainApplication;
 import site.achun.git.social.local.Cache;
 import site.achun.git.social.local.ConfigUtil;
 import site.achun.git.social.local.GitUtil;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+public class InitController implements Initializable {
 
     @FXML
     private TextField repoUrlTextField;

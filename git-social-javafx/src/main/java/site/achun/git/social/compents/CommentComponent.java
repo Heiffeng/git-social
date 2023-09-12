@@ -5,9 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import site.achun.git.social.data.CommentsInfo;
 
-public class ShowComment extends HBox{
+public class CommentComponent extends HBox{
 
-    public ShowComment(CommentsInfo info){
+    public CommentComponent(CommentsInfo info){
         setSpacing(10);
         setPadding(new Insets(5));
 
