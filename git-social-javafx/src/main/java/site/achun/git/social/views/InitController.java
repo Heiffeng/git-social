@@ -8,10 +8,7 @@ import javafx.stage.Stage;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.MainApplication;
-import site.achun.git.social.local.Cache;
-import site.achun.git.social.local.ConfigUtil;
-import site.achun.git.social.local.GitUtil;
-import site.achun.git.social.local.PathUtil;
+import site.achun.git.social.local.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,9 +50,9 @@ public class InitController implements Initializable {
         }
 
         GitUtil.cloneOrPull(repoUrl);
-        ConfigUtil.set("repoUrl",repoUrl);
-        ConfigUtil.set("username",username);
-        ConfigUtil.set("password",password);
+        ConfigFileHandler.getInstance().write(ConfigObject::setRepoUrl,repoUrl);
+        ConfigFileHandler.getInstance().write(ConfigObject::setUsername,username);
+        ConfigFileHandler.getInstance().write(ConfigObject::setPassword,password);
         Cache.repoUrl = repoUrl;
 
         // 用户名和密码

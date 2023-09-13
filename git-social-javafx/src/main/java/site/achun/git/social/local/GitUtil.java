@@ -35,12 +35,17 @@ public class GitUtil {
 
     public static void push() throws IOException, GitAPIException {
         // 提交到git
-        UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(ConfigUtil.get("username"),ConfigUtil.get("password"));
         File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
         Git git = new Git(new FileRepository(repoDir));
         git.add().addFilepattern(".").call();
         git.commit().setAll(true).setMessage("AUTO COMMIT").call();
-        git.push().setRemote("origin").setCredentialsProvider(credentialsProvider).call();
+        git.push().setRemote("origin").setCredentialsProvider(buildCredentialsProvider()).call();
+    }
+
+    private static UsernamePasswordCredentialsProvider buildCredentialsProvider(){
+        String username = ConfigFileHandler.getInstance().read(ConfigObject::getUsername);
+        String password = ConfigFileHandler.getInstance().read(ConfigObject::getPassword);
+        return new UsernamePasswordCredentialsProvider(username,password);
     }
 
     public static String getPathFromUri(String url) {

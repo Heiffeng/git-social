@@ -5,9 +5,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.eclipse.jgit.util.StringUtils;
 import site.achun.git.social.local.Cache;
-import site.achun.git.social.local.ConfigUtil;
+import site.achun.git.social.local.ConfigFileHandler;
+import site.achun.git.social.local.ConfigObject;
 import site.achun.git.social.views.HomeController;
 import site.achun.git.social.views.InitController;
 
@@ -18,15 +18,19 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+        // 初始化配置文件
         try {
-            if(!StringUtils.isEmptyOrNull(ConfigUtil.get("repoUrl"))){
-                Cache.repoUrl = ConfigUtil.get("repoUrl");
-                openHomeView(stage);
-            }else{
-                openInitView(stage);
-            }
+            ConfigFileHandler.initInstance();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        if(!ConfigFileHandler.getInstance().getExistConfigFile()){
+            // 不存在配置文件，打开初始化页面
+            openInitView(stage);
+        }else{
+            Cache.repoUrl = ConfigFileHandler.getInstance().read(ConfigObject::getRepoUrl);
+            openHomeView(stage);
         }
     }
 
