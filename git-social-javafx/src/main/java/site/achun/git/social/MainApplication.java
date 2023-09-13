@@ -29,7 +29,6 @@ public class MainApplication extends Application {
             // 不存在配置文件，打开初始化页面
             openInitView(stage);
         }else{
-            Cache.repoUrl = ConfigFileHandler.getInstance().read(ConfigObject::getRepoUrl);
             openHomeView(stage);
         }
     }

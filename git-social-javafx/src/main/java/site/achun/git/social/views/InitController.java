@@ -53,10 +53,9 @@ public class InitController implements Initializable {
         ConfigFileHandler.getInstance().write(ConfigObject::setRepoUrl,repoUrl);
         ConfigFileHandler.getInstance().write(ConfigObject::setUsername,username);
         ConfigFileHandler.getInstance().write(ConfigObject::setPassword,password);
-        Cache.repoUrl = repoUrl;
 
         // 用户名和密码
-        if(GitUtil.isCorrectUsernameAndPassword(PathUtil.getCurrentUserFileRepository(),username,password)){
+        if(GitUtil.isCorrectUsernameAndPassword(CurrentUser.fileRepository(),username,password)){
             Stage stage = (Stage) repoUrlTextField.getScene().getWindow();
             MainApplication.openHomeView(stage);
         }else{

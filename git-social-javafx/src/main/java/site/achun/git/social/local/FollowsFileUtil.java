@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 public class FollowsFileUtil {
 
     public static void initFollowsFile() throws IOException, GitAPIException {
-        File followsFile = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl), "follows.txt").toFile();
+        File followsFile = Path.of(CurrentUser.dirPath(), "follows.txt").toFile();
         followsFile.createNewFile();
         try (FileWriter fileWriter = new FileWriter(followsFile)) {
-            fileWriter.write(Cache.repoUrl);
+            fileWriter.write(ConfigFileHandler.getRepoUrl());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -33,9 +33,9 @@ public class FollowsFileUtil {
     }
 
     public static void addFollows(String url) throws GitAPIException, IOException {
-        List<String> follows = readFollows(Cache.repoUrl);
+        List<String> follows = readFollows(ConfigFileHandler.getRepoUrl());
         follows.add(url);
-        File followsFile = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl), "follows.txt").toFile();
+        File followsFile = Path.of(CurrentUser.dirPath(), "follows.txt").toFile();
         try (FileWriter fileWriter = new FileWriter(followsFile)) {
             String string = follows.stream().collect(Collectors.joining("\n"));
             fileWriter.write(string);

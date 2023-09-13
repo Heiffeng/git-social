@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import site.achun.git.social.local.Cache;
+import site.achun.git.social.local.CurrentUser;
 import site.achun.git.social.local.GitUtil;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class AddNewContentController {
         String uuid = UUID.randomUUID().toString().replace("-","");
         LocalDateTime now = LocalDateTime.now();
         String date = now.format(DateTimeFormatter.ofPattern("yyyyMM"));
-        Path contentFilePath = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl), "content", date, uuid + ".md");
+        Path contentFilePath = Path.of(CurrentUser.dirPath(), "content", date, uuid + ".md");
         File contentFile = contentFilePath.toFile();
         if(!contentFile.exists()){
             contentFile.getParentFile().mkdirs();

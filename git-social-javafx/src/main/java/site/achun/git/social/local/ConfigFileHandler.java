@@ -36,7 +36,12 @@ public class ConfigFileHandler {
         return instance;
     }
 
-    public  <T,U> void write(Setter<ConfigObject,U> key, U value){
+    public  <T,U> void write(Setter<ConfigObject,U> key, U value) throws IOException {
+        if(!existConfigFile){
+            Path.of(CONFIG_PATH).toFile().createNewFile();
+            configObject = new ConfigObject();
+            existConfigFile = true;
+        }
         key.set(configObject,value);
         try (FileWriter fileWriter = new FileWriter(CONFIG_PATH)) {
             fileWriter.write(JSON.toJSONString(configObject));
@@ -51,6 +56,10 @@ public class ConfigFileHandler {
 
     public Boolean getExistConfigFile() {
         return existConfigFile;
+    }
+
+    public static String getRepoUrl(){
+        return getInstance().read(ConfigObject::getRepoUrl);
     }
 
 }

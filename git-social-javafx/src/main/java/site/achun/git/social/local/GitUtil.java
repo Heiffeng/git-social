@@ -35,7 +35,7 @@ public class GitUtil {
 
     public static void push() throws IOException, GitAPIException {
         // 提交到git
-        File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
+        File repoDir = Path.of(CurrentUser.dirPath(),".git").toFile();
         Git git = new Git(new FileRepository(repoDir));
         git.add().addFilepattern(".").call();
         git.commit().setAll(true).setMessage("AUTO COMMIT").call();

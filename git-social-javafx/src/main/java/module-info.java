@@ -11,10 +11,10 @@ module site.achun.git.social {
     requires org.eclipse.jgit;
     requires com.alibaba.fastjson2;
 
-
     opens site.achun.git.social to javafx.fxml;
     opens site.achun.git.social.views to javafx.fxml;
     opens site.achun.git.social.data;
+    opens site.achun.git.social.local;
 
     exports site.achun.git.social;
     exports site.achun.git.social.views;

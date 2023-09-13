@@ -4,8 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.util.StringUtils;
+import site.achun.git.social.local.CurrentUser;
 import site.achun.git.social.local.GitUtil;
-import site.achun.git.social.local.PathUtil;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +19,7 @@ public class CommentsService {
 
     // uuid,comments content,time,
     public static void addComments(String uuid,String content) throws IOException {
-        File commentFile = Path.of(PathUtil.getCurrentUserGitDirPath(),"content","comments.json").toFile();
+        File commentFile = Path.of(CurrentUser.dirPath(),"content","comments.json").toFile();
         String jsonString = null;
         if(!commentFile.exists()){
             commentFile.getParentFile().mkdirs();

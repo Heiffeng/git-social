@@ -17,9 +17,7 @@ import site.achun.git.social.compents.AddFollows;
 import site.achun.git.social.compents.TweetComponent;
 import site.achun.git.social.data.Content;
 import site.achun.git.social.data.DataScanService;
-import site.achun.git.social.local.Cache;
-import site.achun.git.social.local.FollowsFileUtil;
-import site.achun.git.social.local.GitUtil;
+import site.achun.git.social.local.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -40,12 +38,12 @@ public class HomeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // 先刷新 repo
-            File repoDir = Path.of("./workspace", GitUtil.getPathFromUri(Cache.repoUrl),".git").toFile();
+            File repoDir = Path.of(CurrentUser.dirPath(),".git").toFile();
             Git git = new Git(new FileRepository(repoDir));
             git.pull().call();
 
             // 读取关注列表
-            List<String> follows = FollowsFileUtil.readFollows(Cache.repoUrl);
+            List<String> follows = FollowsFileUtil.readFollows(ConfigFileHandler.getRepoUrl());
             if(!follows.isEmpty()){
                 Cache.follows = follows;
                 follows.stream().forEach(followRepoUrl -> {

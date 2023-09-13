@@ -13,7 +13,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import site.achun.git.social.data.*;
-import site.achun.git.social.local.UserUtil;
+import site.achun.git.social.local.CurrentUser;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class TweetComponent extends HBox {
         OperationsHBox operationsHBox = new OperationsHBox(text -> {
             try {
                 Comments comments = new Comments(content.getUuid(),text,"");
-                User user = UserUtil.getCurrentUser();
+                User user = CurrentUser.getUser();
                 CommentsInfo commentsInfo = new CommentsInfo(user, comments);
                 if(content.getComments()==null){
                     content.setComments(new ArrayList<>());
