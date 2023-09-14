@@ -8,6 +8,8 @@ a social media based on git.
 ## Initialize software
 To use this software, you first need to have your own publicly available git repository, as well as an account and password to log in to the repository. The git repository is designed to store your social data, such as updates, comments, and likes. The account and password are for the software to successfully push data to your git repository.
 
+![20230914105853](https://github.com/Heiffeng/git-social/assets/93337344/dd019e22-9049-41eb-a1f2-b42511dedcac)
+
 ## Post updates
 After publishing the dynamic, the software will automatically push the data to the remote git repository. But comments and likes need to be manually pushed by clicking the push button.
 
