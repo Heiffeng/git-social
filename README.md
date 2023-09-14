@@ -1,6 +1,8 @@
 # git-social
 a social media based on git.
 
+[中文说明](./README.cn.md)
+
 # Instructions
 
 ## Initialize software
