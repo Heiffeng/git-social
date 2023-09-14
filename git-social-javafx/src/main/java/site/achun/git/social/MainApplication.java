@@ -5,11 +5,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import site.achun.git.social.local.Cache;
+import site.achun.git.social.compents.InitVBox;
 import site.achun.git.social.local.ConfigFileHandler;
-import site.achun.git.social.local.ConfigObject;
 import site.achun.git.social.views.HomeController;
-import site.achun.git.social.views.InitController;
 
 import java.io.IOException;
 
@@ -43,8 +41,7 @@ public class MainApplication extends Application {
     }
 
     public static void openInitView(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(InitController.class.getResource("init.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(new InitVBox(), 800, 600);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.setResizable(false);
