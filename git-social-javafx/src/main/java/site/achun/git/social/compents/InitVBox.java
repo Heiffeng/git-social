@@ -24,6 +24,9 @@ public class InitVBox extends VBox {
     private InputHBox username;
     private InputHBox password;
     private Label tipsLabel;
+
+    private SubmitButton submitButton;
+
     public InitVBox(){
         this.setSpacing(15);
         this.setPadding(new Insets(10)); // 设置容器的边距
@@ -43,7 +46,7 @@ public class InitVBox extends VBox {
         tipsLabel = new Label("");
         tipsLabel.setMinWidth(600);
         // 添加按钮
-        Button submitButton = new Button("Submit");
+        submitButton = new SubmitButton();
         HBox hbox = new HBox();
         hbox.getChildren().addAll(tipsLabel, submitButton);
 
@@ -53,6 +56,70 @@ public class InitVBox extends VBox {
         submitButton.setOnAction(this::onSubmit);
     }
 
+    public void onSubmit(ActionEvent event){
+        submitButton.setText("Watingddd");
+        submitButton.waiting();
+        String repoUrl = repo.getTextField().getText();
+        String usernameValue = username.getTextField().getText();
+        String passwordValue = password.getTextField().getText();
+
+        if(StringUtils.isEmptyOrNull(repoUrl)){
+            tipsLabel.setText("Input is null");
+            submitButton.standby();
+            return;
+        }
+        if(StringUtils.isEmptyOrNull(usernameValue)){
+            tipsLabel.setText("username is null");
+            submitButton.standby();
+            return;
+        }
+        if(StringUtils.isEmptyOrNull(passwordValue)){
+            tipsLabel.setText("password is null");
+            submitButton.standby();
+            return;
+        }
+        try {
+            GitUtil.cloneOrPull(repoUrl);
+            ConfigFileHandler.getInstance().write(ConfigObject::setRepoUrl,repoUrl);
+            ConfigFileHandler.getInstance().write(ConfigObject::setUsername,usernameValue);
+            ConfigFileHandler.getInstance().write(ConfigObject::setPassword,passwordValue);
+            // 用户名和密码
+            if(GitUtil.isCorrectUsernameAndPassword(CurrentUser.fileRepository(),usernameValue,passwordValue)){
+                // 打开主页窗口
+                Stage stage = (Stage) repo.getTextField().getScene().getWindow();
+                MainApplication.openHomeView(stage);
+            }else{
+                tipsLabel.setText("username or password is error. Please try again.");
+                username.getTextField().setText("");
+                password.getTextField().setText("");
+                submitButton.standby();
+            }
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }finally {
+            submitButton.standby();
+        }
+    }
+
+
+    public static class SubmitButton extends Button{
+        private String text;
+        public SubmitButton(){
+            text = "Submit";
+            this.setText(text);
+        }
+
+        public void waiting(){
+            this.setText("Waiting...");
+            this.setDisable(true);
+        }
+        public void standby(){
+            this.setText(text);
+            this.setDisable(false);
+        }
+    }
 
     public static class InputHBox extends HBox{
         private TextField textField;
@@ -66,51 +133,9 @@ public class InitVBox extends VBox {
             textField.setPromptText(promptText);
             getChildren().addAll(label,textField);
         }
-
         public TextField getTextField() {
             return textField;
         }
-    }
-
-    public void onSubmit(ActionEvent event){
-        String repoUrl = repo.getTextField().getText();
-        String usernameValue = username.getTextField().getText();
-        String passwordValue = password.getTextField().getText();
-
-        if(StringUtils.isEmptyOrNull(repoUrl)){
-            tipsLabel.setText("Input is null");
-            return;
-        }
-        if(StringUtils.isEmptyOrNull(usernameValue)){
-            tipsLabel.setText("username is null");
-            return;
-        }
-        if(StringUtils.isEmptyOrNull(passwordValue)){
-            tipsLabel.setText("password is null");
-            return;
-        }
-
-        try {
-            GitUtil.cloneOrPull(repoUrl);
-            ConfigFileHandler.getInstance().write(ConfigObject::setRepoUrl,repoUrl);
-            ConfigFileHandler.getInstance().write(ConfigObject::setUsername,usernameValue);
-            ConfigFileHandler.getInstance().write(ConfigObject::setPassword,passwordValue);
-
-            // 用户名和密码
-            if(GitUtil.isCorrectUsernameAndPassword(CurrentUser.fileRepository(),usernameValue,passwordValue)){
-                Stage stage = (Stage) repo.getTextField().getScene().getWindow();
-                MainApplication.openHomeView(stage);
-            }else{
-                tipsLabel.setText("username or password is error. Please try again.");
-                username.getTextField().setText("");
-                password.getTextField().setText("");
-            }
-        } catch (GitAPIException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }

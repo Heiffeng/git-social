@@ -5,7 +5,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -15,6 +14,7 @@ import org.eclipse.jgit.internal.storage.file.FileRepository;
 import site.achun.git.social.compents.AddContent;
 import site.achun.git.social.compents.AddFollows;
 import site.achun.git.social.compents.TweetComponent;
+import site.achun.git.social.compents.UserInfoPane;
 import site.achun.git.social.data.Content;
 import site.achun.git.social.data.DataScanService;
 import site.achun.git.social.local.*;
@@ -26,9 +26,6 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class HomeController implements Initializable {
-
-    @FXML
-    private AnchorPane anchorPane;
 
     @FXML
     private ScrollPane scrollPane;
@@ -89,6 +86,16 @@ public class HomeController implements Initializable {
         Scene scene = new Scene(new AddFollows(),300,200);
         Stage stage = new Stage();
         stage.setTitle("Add Follows");
+        stage.setScene(scene);
+        stage.show();
+    }
+    @FXML
+    protected void openUserInfo(){
+        Stage curStage = (Stage) scrollPane.getScene().getWindow();
+        curStage.close();
+        Scene scene = new Scene(new UserInfoPane(),300,200);
+        Stage stage = new Stage();
+        stage.setTitle("UserInfo");
         stage.setScene(scene);
         stage.show();
     }

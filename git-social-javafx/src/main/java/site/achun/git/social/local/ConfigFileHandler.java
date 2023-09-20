@@ -38,7 +38,9 @@ public class ConfigFileHandler {
 
     public  <T,U> void write(Setter<ConfigObject,U> key, U value) throws IOException {
         if(!existConfigFile){
-            Path.of(CONFIG_PATH).toFile().createNewFile();
+            File configFile = Path.of(CONFIG_PATH).toFile();
+            configFile.getParentFile().mkdirs();
+            configFile.createNewFile();
             configObject = new ConfigObject();
             existConfigFile = true;
         }

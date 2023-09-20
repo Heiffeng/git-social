@@ -7,7 +7,8 @@
    <children>
       <ScrollPane fx:id="scrollPane" prefHeight="850.0" prefWidth="600.0" />
       <Button onAction="#addNewContent" layoutX="450.0" layoutY="860.0" mnemonicParsing="false" text="Create Moments" />
-      <Button onAction="#addNewFollows" layoutX="350.0" layoutY="860.0" mnemonicParsing="false" text="Add Follows" />
+      <Button onAction="#addNewFollows" layoutX="330.0" layoutY="860.0" mnemonicParsing="false" text="Add Follows" />
+      <Button onAction="#openUserInfo" layoutX="230.0" layoutY="860.0" mnemonicParsing="false" text="UserInfo" />
    </children>
 
 </AnchorPane>
