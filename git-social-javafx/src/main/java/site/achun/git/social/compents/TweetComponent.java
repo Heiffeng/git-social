@@ -106,42 +106,55 @@ public class TweetComponent extends HBox {
     public static class OperationsHBox extends GridPane {
         public OperationsHBox(Consumer<String> addComments){
             CommentSubmitComponent commentSubmitComponent = new CommentSubmitComponent(addComments);
-            Button button3 = new Button("Like");
+            Button likeButton = new Button("Like");
+            likeButton.setMinWidth(80);
             this.add(new HBox(),0,0);
 
             HBox hbox = new HBox();
             hbox.setSpacing(10);
-            hbox.getChildren().addAll(commentSubmitComponent,button3);
+            hbox.getChildren().addAll(commentSubmitComponent,likeButton);
             this.add(hbox,1,0);
             this.setHgap(150);
         }
     }
 
     public static class CommentSubmitComponent extends HBox {
+        private boolean isSubmit = false;
 
         public CommentSubmitComponent(Consumer<String> consumer){
             this.setSpacing(10);
             this.setAlignment(Pos.CENTER_LEFT);
             TextField commentTextField = new TextField();
+            commentTextField.setVisible(isSubmit);
             commentTextField.setPromptText("Add a comment...");
-            this.setStyle("-fx-opacity: 0.5;"); // 设置初始透明度
-            commentTextField.setOnMousePressed(event -> {
-                this.setStyle("-fx-opacity: 1.0;");
-            });
-            commentTextField.focusedProperty().addListener((obs, oldVal, newVal) -> {
-                if (!newVal) {
-                    this.setStyle("-fx-opacity: 0.5;"); // 失去焦点时设置透明度为 0.5
-                }
-            });
-            Button commentButton = new Button("Submit");
+//            this.setStyle("-fx-opacity: 0.5;"); // 设置初始透明度
+//            commentTextField.setOnMousePressed(event -> {
+//                this.setStyle("-fx-opacity: 1.0;");
+//            });
+//            commentTextField.focusedProperty().addListener((obs, oldVal, newVal) -> {
+//                if (!newVal) {
+//                    this.setStyle("-fx-opacity: 0.5;"); // 失去焦点时设置透明度为 0.5
+//                }
+//            });
+            Button commentButton = new Button("Comment");
+            commentButton.setMinWidth(100);
             commentButton.setOnAction(e -> {
-                String comment = commentTextField.getText();
-                if (!comment.isEmpty()) {
-                    // 处理评论，例如，将评论添加到推文中或发送到服务器
-                    System.out.println("Comment: " + comment);
-                    consumer.accept(comment);
+                if(isSubmit){
+                    String comment = commentTextField.getText();
+                    if (!comment.isEmpty()) {
+                        // 处理评论，例如，将评论添加到推文中或发送到服务器
+                        System.out.println("Comment: " + comment);
+                        consumer.accept(comment);
 //                    CommentsService.addComments(content.getUuid(),comment);
-                    commentTextField.clear();
+                        commentTextField.clear();
+                    }
+                    isSubmit = false;
+                    commentButton.setText("Comment");
+                    commentTextField.setVisible(isSubmit);
+                }else{
+                    isSubmit = true;
+                    commentButton.setText("Submit");
+                    commentTextField.setVisible(isSubmit);
                 }
             });
             this.getChildren().addAll(commentTextField, commentButton);
